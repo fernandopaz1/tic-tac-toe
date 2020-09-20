@@ -1,0 +1,17 @@
+.center {
+    margin-left: auto;
+    margin-right: auto;
+    display: inline-block;
+}
+
+
+.boardContainer{
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+}
+
+
+.square{
+    border: 1px black solid;
+}
