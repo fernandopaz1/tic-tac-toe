@@ -5,13 +5,24 @@
 }
 
 
-.boardContainer{
+.file{
     display: flex;
     justify-content: center;
     flex-direction: row;
 }
 
+.boardContainer{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+   }
+
 
 .square{
     border: 1px black solid;
+    padding: 50px;
+    border-radius: 10%;
+    margin: .5%;
+    width: 0.1em;
+    height: 0.1em;
 }
