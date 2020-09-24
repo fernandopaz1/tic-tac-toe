@@ -6,7 +6,7 @@
 
 #titleContainer{
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    color: rgb(43, 43, 43);
+    color: rgb(65, 64, 64);
     background-color: rgb(166, 250, 250);
     border-radius: 1em;
 }
@@ -40,8 +40,9 @@
 
 
 .square{
-    background-color: azure;
+    background-color: rgb(238, 188, 123);
     font-family: 'Noto Sans', sans-serif;
+    color: rgb(51, 50, 50);
     font-size: 500%;
     text-align: right;
     border: 3px rgb(155, 122, 247) solid;

@@ -83,8 +83,8 @@ const Gameboard = () => {
 
 
 const Game = () => {
-	let player1 = Player("hola", "X");
-	let player2 = Player("chau", "O");
+	let player1 = Player("Player 1", "X");
+	let player2 = Player("Player 2", "O");
 	let turn = true;
 	let board = Gameboard();
 	this.changeTurn = () => { turn = !turn };
