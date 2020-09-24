@@ -1,11 +1,30 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@700&display=swap');
 
-.center {
-    margin-left: auto;
-    margin-right: auto;
-    display: inline-block;
+#document{
+    background-color: rgb(208, 165, 248);
 }
 
+#titleContainer{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: rgb(43, 43, 43);
+    background-color: rgb(166, 250, 250);
+    border-radius: 1em;
+}
+
+.center {
+    width: 100%;
+    justify-content: center;
+    display: flex;
+}
+
+#winnerMessage{
+    text-align: center;
+    background-color: rgb(106, 255, 138);
+    color: rgb(82, 53, 184);
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    width: 80%;
+    border-radius: 15em;
+}
 
 .file{
     display: flex;
@@ -21,10 +40,11 @@
 
 
 .square{
+    background-color: azure;
     font-family: 'Noto Sans', sans-serif;
     font-size: 500%;
     text-align: right;
-    border: 1px black solid;
+    border: 3px rgb(155, 122, 247) solid;
     padding: 50px;
     border-radius: 10%;
     margin: .5%;
