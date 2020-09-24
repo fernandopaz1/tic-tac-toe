@@ -38,13 +38,18 @@ const game = Game();
 
 const squares = document.querySelectorAll("div.square");
 
-let tableroArray = [];
 
 
-squares.forEach(square => {
-	
-	tableroArray.push(square);
 
+const Gameboard = () => {
+	let tableroArray = [];
+	squares.forEach(square =>tableroArray.push(square));
+	let board= [tableroArray.slice(0,3),tableroArray.slice(3,6),tableroArray.slice(6,9)];
+	return {board}	
+}
+
+
+squares.forEach(square =>
 	square.addEventListener("click", (e) => {
 		let element = e.target;
 		if (element.innerHTML == "") {
@@ -53,6 +58,6 @@ squares.forEach(square => {
 			game.changeTurn();
 		}
 	})
-})
+)
 
 
