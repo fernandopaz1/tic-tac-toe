@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@700&display=swap');
+
 .center {
     margin-left: auto;
     margin-right: auto;
@@ -19,12 +21,18 @@
 
 
 .square{
+    font-family: 'Noto Sans', sans-serif;
+    font-size: 500%;
+    text-align: right;
     border: 1px black solid;
     padding: 50px;
     border-radius: 10%;
     margin: .5%;
     width: 0.1em;
     height: 0.1em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .square:not(.completed):hover{
