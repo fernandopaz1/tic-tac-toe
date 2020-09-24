@@ -1,5 +1,5 @@
-const addBoard = (files, rows) => {
-	const addSquare = () => '<div class="square">&nbsp</div>';
+const Board = (files, rows) => {
+	const addSquare = () => '<div class="square"></div>';
 
 	function addSquareFile(cantColumnas) {
 		let file = "";
@@ -16,13 +16,34 @@ const addBoard = (files, rows) => {
 	}
 };
 
-addBoard(3, 3);
+Board(3, 3);
 
-document.querySelectorAll("div.square").forEach(square =>{
-	square.addEventListener("click",(e)=>{
-		let element= e.target;
-		element.classList.add("completed");
-		element.innerHTML="X";
+const Player = (name, piece) => {
+	this.getName = () => name;
+	this.getPiece = () => piece;
+	return { name, piece, getName, getPiece };
+}
+
+const Game = () => {
+	let player1 = Player("hola", "X");
+	let player2 = Player("chau", "O");
+	let turn = true;
+	this.changeTurn = () => { turn = !turn };
+	this.actualPlayer = () => { return turn ? player1 : player2 };
+	this.actualPiece = () => actualPlayer().getPiece();
+	return { player1, player2, turn, changeTurn, actualPlayer, actualPiece }
+}
+
+const ttt = Game();
+
+document.querySelectorAll("div.square").forEach(square => {
+	square.addEventListener("click", (e) => {
+		let element = e.target;
+		if (element.innerHTML == "") {
+			element.classList.add("completed");
+			element.innerHTML = ttt.actualPiece();
+			ttt.changeTurn();
+		}
 	})
 })
 
