@@ -152,6 +152,8 @@ const endGame = (winnerName) => {
 		document.querySelector(".boardContainer").innerHTML="";
 		beginGame();
 		addInteractionWithInterface()
+		buttonContainer.innerHTML=""
+		message.innerHTML=""
 	})
 }
 
