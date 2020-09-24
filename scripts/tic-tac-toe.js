@@ -34,16 +34,25 @@ const Game = () => {
 	return { player1, player2, turn, changeTurn, actualPlayer, actualPiece }
 }
 
-const ttt = Game();
+const game = Game();
 
-document.querySelectorAll("div.square").forEach(square => {
+const squares = document.querySelectorAll("div.square");
+
+let tableroArray = [];
+
+
+squares.forEach(square => {
+	
+	tableroArray.push(square);
+
 	square.addEventListener("click", (e) => {
 		let element = e.target;
 		if (element.innerHTML == "") {
 			element.classList.add("completed");
-			element.innerHTML = ttt.actualPiece();
-			ttt.changeTurn();
+			element.innerHTML = game.actualPiece();
+			game.changeTurn();
 		}
 	})
 })
+
 
