@@ -22,12 +22,14 @@ const Player = (name, piece) => {
 	this.getPiece = () => piece;
 	return { name, piece, getName, getPiece };
 }
-inicializarCeldas(3, 3);
+
+
+// inicializarCeldas(3, 3);
 
 const Gameboard = () => {
 	let tableroArray = [];
-	let squares = document.querySelectorAll("div.square");
-	squares.forEach(square => tableroArray.push(square));
+	let squar = document.querySelectorAll("div.square");
+	squar.forEach(square => tableroArray.push(square));
 	let board = [tableroArray.slice(0, 3), tableroArray.slice(3, 6), tableroArray.slice(6, 9)];
 	this.contenido = (i, j) => {
 		return board[i][j].textContent;
@@ -98,16 +100,22 @@ const Game = () => {
 	return { player1, player2, turn, changeTurn, actualPlayer, actualPiece, actualName, isWinner }
 }
 
-const game = Game();
 
-const squares = document.querySelectorAll("div.square");
+function beginGame(){
+
+	inicializarCeldas(3, 3);
+	return addInteractionWithInterface()
+	
+
+}
+
+let interaction = beginGame();
 
 
+function addInteractionWithInterface(){
 
-
-
-squares.forEach(square =>
-	square.addEventListener("click", (e) => {
+	const game = Game();
+	function interaction(e){
 		let element = e.target;
 		if (element.innerHTML == "") {
 			element.classList.add("completed");
@@ -118,11 +126,32 @@ squares.forEach(square =>
 			}
 			game.changeTurn();
 		}
-	})
-)
+	}
+	const squares=document.querySelectorAll("div.square");
+	squares.forEach(square =>
+		square.addEventListener("click", interaction)
+	)
+	this.removeListeners =()=>{
+		squares.forEach(square =>{
+			square.removeEventListener("click",interaction)
+		})
+	}
+	return {squares,removeListeners}
+}
 
 const endGame = (winnerName) => {
 	let message = document.querySelector("#winnerMessage");
-	message.innerText = `The winner is ${winnerName}`
+	let buttonContainer = document.querySelector("#newGameContainer");
+	message.innerText = `The winner is ${winnerName}`;
+	buttonContainer.innerHTML=`<button id="newGameButton">New Game</div>`
+
+	interaction.removeListeners();
+
+	document.querySelector("#newGameButton").addEventListener("click",()=>{
+		
+		document.querySelector(".boardContainer").innerHTML="";
+		beginGame();
+		addInteractionWithInterface()
+	})
 }
 
