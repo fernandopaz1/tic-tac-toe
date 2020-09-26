@@ -71,14 +71,25 @@ const Gameboard = () => {
 		for (let i = 0; i < 3; i++) {
 			result = result || ganoEnLaColumna(i, pieza);
 			result = result || ganoEnLaFila(i, pieza);
-			result = result || ganoEnLaDiagonalDerecha(pieza, i);
-			result = result || ganoEnLaDiagonalIzquierda(pieza, i);
+
 		}
+		result = result || ganoEnLaDiagonalDerecha(pieza, 0);
+		result = result || ganoEnLaDiagonalIzquierda(pieza, 0);
 		return result
 	}
 
+	const isAtie = () => {
+		let cantidadDePiezas = 0;
+		for (let i = 0; i < 9; i++) {
+			if (contenido(Math.trunc(i / 3), i % 3) != ""){
+				console.log(`piezas encontradas : ${cantidadDePiezas}`)
+				cantidadDePiezas++;
+			}
+		}
+		return cantidadDePiezas == 9 ? true : false;
+	}
 
-	return { board, ganador }
+	return { board, ganador, isAtie }
 }
 
 
@@ -87,89 +98,107 @@ const Game = () => {
 	let player2 = Player("Player 2", "O");
 	let turn = true;
 	let board = Gameboard();
-	this.changeTurn = () => { 
-		let value = turn;
-		turn = !value; 
-	};
-	this.setTurn = (option)=> {turn=option}
+	this.changeTurn = () => { turn = !turn };
 	this.actualPlayer = () => { return turn ? player1 : player2 };
 	this.actualName = () => actualPlayer().getName();
 	this.actualPiece = () => actualPlayer().getPiece();
 	this.isWinner = () => board.ganador(actualPiece());
-
-	return { player1, player2, turn, changeTurn, actualPlayer, actualPiece, actualName, isWinner, setTurn}
+	this.isATie = () => board.isAtie();
+	this.play = (element) => {
+		element.innerHTML = actualPiece();
+		if (isWinner()) {
+			interface.endGame(actualName());
+		}
+		else if(isATie()){
+			interface.draw()
+		}
+		changeTurn();
+	}
+	return {play}
 }
 
 
-function beginGame(){
+function beginGame() {
 
 	let interaction;
-	const beginInterface = () =>{
+	const beginInterface = () => {
 		inicializarCeldas(3, 3);
-		
+
 	}
 
-	const setInteraction =()=>{
+	const setInteraction = () => {
 		beginInterface();
 		interaction = addInteractionWithInterface();
 	}
 
 	setInteraction();
-	
+
 	const endGame = (winnerName) => {
 		let message = document.querySelector("#winnerMessage");
 		let buttonContainer = document.querySelector("#newGameContainer");
 		message.innerText = `The winner is ${winnerName}`;
-		buttonContainer.innerHTML=`<button id="newGameButton">New Game</div>`
-	
+		buttonContainer.innerHTML = `<button id="newGameButton">New Game</div>`
+
 		interaction.removeListeners();
-	
-		document.querySelector("#newGameButton").addEventListener("click",()=>{	
-		
-			document.querySelector(".boardContainer").innerHTML="";
+
+		document.querySelector("#newGameButton").addEventListener("click", () => {
+
+			document.querySelector(".boardContainer").innerHTML = "";
 			setInteraction();
-			buttonContainer.innerHTML=""
-			message.innerHTML=""
+			buttonContainer.innerHTML = ""
+			message.innerHTML = ""
 		})
 	}
-	
 
-	return {interaction,endGame}
+	const draw = () => {
+		let message = document.querySelector("#winnerMessage");
+		let buttonContainer = document.querySelector("#newGameContainer");
+		message.innerText = `Its a draw`;
+		buttonContainer.innerHTML = `<button id="newGameButton">New Game</div>`
+
+		interaction.removeListeners();
+
+		document.querySelector("#newGameButton").addEventListener("click", () => {
+
+			document.querySelector(".boardContainer").innerHTML = "";
+			setInteraction();
+			buttonContainer.innerHTML = ""
+			message.innerHTML = ""
+		})
+	}
+
+	return { interaction, endGame, draw}
 }
 
 
 
 
-function addInteractionWithInterface(){
+function addInteractionWithInterface() {
 	let game = Game();
-	
-	function interaction(e){
+
+	function interaction(e) {
 		let element = e.target;
 		if (element.innerHTML == "") {
 			element.classList.add("completed");
-			element.innerHTML = game.actualPiece();
-			if (game.isWinner()) {
-				interface.endGame(game.actualName())
-				return;
-			}
-			game.changeTurn();
-			
+			game.play(element);
+
 		}
 	}
-	
-	const squares=document.querySelectorAll("div.square");
-	
+
+	const squares = document.querySelectorAll("div.square");
+
 	squares.forEach(square =>
 		square.addEventListener("click", interaction)
 	)
 
-	this.removeListeners =()=>{
-		squares.forEach(square =>{
-			square.removeEventListener("click",interaction)
+	this.removeListeners = () => {
+		squares.forEach(square => {
+			square.removeEventListener("click", interaction)
 		})
 	}
-	return {squares, game,removeListeners}
+	return { removeListeners }
 }
 
 
-let interface= beginGame();
+let interface = beginGame();
+
