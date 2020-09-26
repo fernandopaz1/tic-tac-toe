@@ -67,3 +67,18 @@
 .square:not(.completed):active{
     background-color: rgb(0, 121, 0);
 }
+
+#newGameButton{
+    margin-top: 5%;
+    width: 10rem;
+    height: 5rem;
+    font-size: large;
+    background-color: aquamarine;
+    font-family: cursive;
+    font-weight: bold;
+    color: rgb(14, 29, 245);
+}
+
+#newGameButton:hover{
+    background-color: rgb(47, 252, 183);
+}
