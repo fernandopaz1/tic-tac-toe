@@ -20,11 +20,43 @@ const inicializarCeldas = (files, rows) => {
 const Player = (name, piece) => {
 	this.getName = () => name;
 	this.getPiece = () => piece;
-	return { name, piece, getName, getPiece };
+	this.equals = (player) => {
+		console.log(`Este es el nombre del ganador `)
+		return name == player.getName() && piece == player.getPiece();
+	}
+	this.toString = () => name;
+	return { getName, getPiece, equals, toString };
 }
 
+const Score = () => {
+	let pointsP1 = 0;
+	let pointsP2 = 0;
+	this.resetScore = () => {
+		pointsP1 = 0;
+		pointsP2 = 0;
+	}
+	this.countScoreP1 = () => { pointsP1++ }
+	this.countScoreP2 = () => { pointsP2++ }
+	this.getP1 = () => pointsP1;
+	this.getP2 = () => pointsP2;
+	return { resetScore, countScoreP1, countScoreP2, getP1, getP2 }
+}
 
-// inicializarCeldas(3, 3);
+const WinCounter = (player1, player2) => {
+	this.countWin = (player) => {
+		console.log(`El resultado de player1.equals(player) es: ${player1.equals(player)}` );
+		console.log(`El resultado de player2.equals(player) es: ${player2.equals(player)}` );
+		if (player1.equals(player)) score.countScoreP1();
+		if (player2.equals(player)) score.countScoreP2();
+	}
+	this.resetCounter = () => { score.resetScore }
+	this.toString = () => {
+		return `${player1.toString()} has ${score.getP1()} points and 
+				${player2.toString()} has ${score.getP2()} points`
+	}
+	return { countWin, resetCounter, toString }
+}
+
 
 const Gameboard = () => {
 	let tableroArray = [];
@@ -78,48 +110,49 @@ const Gameboard = () => {
 		return result
 	}
 
-	const isAtie = () => {
-		let cantidadDePiezas = 0;
+	const isATie = () => {
+		let isATie = true;
 		for (let i = 0; i < 9; i++) {
-			if (contenido(Math.trunc(i / 3), i % 3) != ""){
-				console.log(`piezas encontradas : ${cantidadDePiezas}`)
-				cantidadDePiezas++;
-			}
+			isATie = isATie && contenido(Math.trunc(i / 3), i % 3) != "";
 		}
-		return cantidadDePiezas == 9 ? true : false;
+		return isATie;
 	}
 
-	return { board, ganador, isAtie }
+	return { ganador, isATie }
 }
 
 
 const Game = () => {
-	let player1 = Player("Player 1", "X");
-	let player2 = Player("Player 2", "O");
+	let player1 = Player("A", "X");
+	let player2 = Player("B", "O");
 	let turn = true;
 	let board = Gameboard();
+	let counter = WinCounter(player1, player2);
+
 	this.changeTurn = () => { turn = !turn };
 	this.actualPlayer = () => { return turn ? player1 : player2 };
 	this.actualName = () => actualPlayer().getName();
 	this.actualPiece = () => actualPlayer().getPiece();
 	this.isWinner = () => board.ganador(actualPiece());
-	this.isATie = () => board.isAtie();
+	this.isATie = () => board.isATie();
+
 	this.play = (element) => {
 		element.innerHTML = actualPiece();
 		if (isWinner()) {
+			counter.countWin(actualPlayer());
 			interface.endGame(actualName());
 		}
-		else if(isATie()){
+		else if (isATie()) {
 			interface.draw()
 		}
 		changeTurn();
 	}
-	return {play}
+	return { play, counter };
 }
 
 
 function beginGame() {
-
+	let message = document.querySelector("#winnerMessage");
 	let interaction;
 	const beginInterface = () => {
 		inicializarCeldas(3, 3);
@@ -134,47 +167,45 @@ function beginGame() {
 	setInteraction();
 
 	const endGame = (winnerName) => {
-		let message = document.querySelector("#winnerMessage");
-		let buttonContainer = document.querySelector("#newGameContainer");
 		message.innerText = `The winner is ${winnerName}`;
-		buttonContainer.innerHTML = `<button id="newGameButton">New Game</div>`
-
 		interaction.removeListeners();
-
-		document.querySelector("#newGameButton").addEventListener("click", () => {
-
-			document.querySelector(".boardContainer").innerHTML = "";
-			setInteraction();
-			buttonContainer.innerHTML = ""
-			message.innerHTML = ""
-		})
 	}
 
 	const draw = () => {
-		let message = document.querySelector("#winnerMessage");
-		let buttonContainer = document.querySelector("#newGameContainer");
 		message.innerText = `Its a draw`;
-		buttonContainer.innerHTML = `<button id="newGameButton">New Game</div>`
-
 		interaction.removeListeners();
-
-		document.querySelector("#newGameButton").addEventListener("click", () => {
-
-			document.querySelector(".boardContainer").innerHTML = "";
-			setInteraction();
-			buttonContainer.innerHTML = ""
-			message.innerHTML = ""
-		})
 	}
 
-	return { interaction, endGame, draw}
+	return { interaction, setInteraction, endGame, draw }
 }
 
+const addEventsToButtons = (interface) => {
+	let message = document.querySelector("#winnerMessage");
+
+	document.querySelector("#restartButton").addEventListener("click", () => {
+		document.querySelector(".boardContainer").innerHTML = "";
+		interface.setInteraction();
+		message.innerHTML = "";
+	})
+
+
+	document.querySelector("#newGameButton").addEventListener("click", () => {
+		document.querySelector(".boardContainer").innerHTML = "";
+		interface.setInteraction();
+		interface.interaction.counter.resetCounter();
+		message.innerHTML = "";
+	})
+
+	document.querySelector("#showCounter").addEventListener("click", () => {
+		message.innerHTML = interface.interaction.counter.toString();
+	})
+}
 
 
 
 function addInteractionWithInterface() {
 	let game = Game();
+	let counter = game.counter;
 
 	function interaction(e) {
 		let element = e.target;
@@ -196,9 +227,10 @@ function addInteractionWithInterface() {
 			square.removeEventListener("click", interaction)
 		})
 	}
-	return { removeListeners }
+	return { removeListeners, counter }
 }
 
-
+let score = Score();
 let interface = beginGame();
+addEventsToButtons(interface);
 
