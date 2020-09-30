@@ -20,6 +20,30 @@
     display: flex;
 }
 
+
+.inputDiv{
+    width: 40rem;
+    height: 20rem;
+    right: 200px;
+    top: 200px;
+    position: absolute;
+    z-index: 1;
+    display:none;
+    border: 2px solid red;
+    flex-direction: column;
+}
+
+.namesContainer{
+    display: flex;
+    flex-direction: row;
+}
+
+.n1Container{
+    height: 10rem;
+    display: flex;
+    flex-direction: column;
+}
+
 #winnerMessage{
     position: relative;
     top: -10px;

@@ -14,8 +14,49 @@ const inicializarCeldas = (files, rows) => {
 	for (let i = 0; i < files; i++) {
 		addSquareFile(rows);
 	}
-};
+}
 
+const inputNames = () => {
+	const inputDiv = document.querySelector("div.inputDiv")
+	const namesContainer = document.createElement("div.namesContainer");
+	const name1Container = document.createElement("div.n1Container")
+	const name2Container = document.createElement("div.n2Container")
+	namesContainer.appendChild(name1Container);
+	namesContainer.appendChild(name2Container);
+
+	const message1 = document.createElement("h1.nameMesage");
+	const message2 = document.createElement("h1.nameMesage");
+
+	message1.textContent="Input player1's name";
+	message2.textContent="Input player2's name";
+
+
+	const name1 = document.createElement("input")
+	const name2 = document.createElement("input")
+	name1.setAttribute('type', 'text');
+	name2.setAttribute('type', 'text');
+
+	name1Container.appendChild(message1);
+	name1Container.appendChild(name1);
+	
+	name2Container.appendChild(message2);
+	name2Container.appendChild(name2);
+
+	const btnSetName =document.createElement("button.saveNames")
+	btnSetName.textContent="Guardar";
+	namesContainer.appendChild(btnSetName);
+
+	inputDiv.appendChild(namesContainer);
+	inputDiv.appendChild(btnSetName);
+
+	this.showNameInput = () => {
+		inputDiv.style= "display:flex;";
+	}
+	return {showNameInput}
+}
+
+let input = inputNames();
+input.showNameInput();
 
 const Player = (name, piece) => {
 	this.getName = () => name;
