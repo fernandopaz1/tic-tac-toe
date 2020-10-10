@@ -1,14 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:wght@700&display=swap");
 
-#document{
+#document {
     background-color: rgb(208, 165, 248);
 }
 
-#titleContainer{
+#titleContainer {
     height: 4.5rem;
     position: relative;
     top: -10px;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
     color: rgb(65, 64, 64);
     background-color: rgb(166, 250, 250);
     border-radius: 1em;
@@ -20,65 +20,63 @@
     display: flex;
 }
 
-
-.inputDiv{
+.inputDiv {
     width: 40rem;
     height: 20rem;
     right: 200px;
     top: 200px;
     position: absolute;
     z-index: 1;
-    display:none;
+    display: none;
     border: 2px solid red;
     flex-direction: column;
 }
 
-.namesContainer{
+.namesContainer {
     display: flex;
     flex-direction: row;
 }
 
-.n1Container{
-    height: 10rem;
+div.n1Container {
+    border: 2px solid black;
+    height: 20rem;
     display: flex;
     flex-direction: column;
 }
 
-#winnerMessage{
+#winnerMessage {
     position: relative;
     top: -10px;
     text-align: center;
     background-color: rgb(106, 255, 138);
     color: rgb(82, 53, 184);
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
     width: 80%;
     border-radius: 15em;
-
 }
 
-.file{
+.file {
     display: flex;
     justify-content: center;
     flex-direction: row;
 }
 
-.boardContainer{
+.boardContainer {
     display: flex;
     justify-content: center;
     flex-direction: column;
-   }
+}
 
-
-.square{
+.square {
     background-color: rgb(238, 188, 123);
-    font-family: 'Noto Sans', sans-serif;
+    font-family: "Noto Sans", sans-serif;
     color: rgb(51, 50, 50);
     font-size: 500%;
     text-align: right;
     border: 3px rgb(155, 122, 247) solid;
     padding: 50px;
     border-radius: 10%;
-    margin: .3%;
+    margin: 0.3%;
     width: 0.1em;
     height: 0.1em;
     display: flex;
@@ -86,19 +84,19 @@
     align-items: center;
 }
 
-.square:not(.completed):hover{
+.square:not(.completed):hover {
     background-color: rgb(38, 233, 38);
 }
 
-.square.completed:hover{
+.square.completed:hover {
     background-color: rgb(250, 29, 29);
 }
 
-.square:not(.completed):active{
+.square:not(.completed):active {
     background-color: rgb(0, 121, 0);
 }
 
-.button{
+.button {
     margin: 0.5%;
     width: 7rem;
     height: 3rem;
@@ -110,6 +108,6 @@
     border-radius: 0.5rem;
 }
 
-.button:hover{
+.button:hover {
     background-color: rgb(47, 252, 183);
 }

@@ -1,4 +1,4 @@
-const inicializarCeldas = (files, rows) => {
+const initializeGrids = (files, rows) => {
 	const addSquare = () => '<div class="square"></div>';
 
 	function addSquareFile(cantColumnas) {
@@ -43,7 +43,7 @@ const inputNames = () => {
 	name2Container.appendChild(name2);
 
 	const btnSetName =document.createElement("button.saveNames")
-	btnSetName.textContent="Guardar";
+	btnSetName.textContent="Save";
 	namesContainer.appendChild(btnSetName);
 
 	inputDiv.appendChild(namesContainer);
@@ -100,66 +100,66 @@ const WinCounter = (player1, player2) => {
 
 
 const Gameboard = () => {
-	let tableroArray = [];
+	let boardArray = [];
 	let squar = document.querySelectorAll("div.square");
-	squar.forEach(square => tableroArray.push(square));
-	let board = [tableroArray.slice(0, 3), tableroArray.slice(3, 6), tableroArray.slice(6, 9)];
-	this.contenido = (i, j) => {
+	squar.forEach(square => boardArray.push(square));
+	let board = [boardArray.slice(0, 3), boardArray.slice(3, 6), boardArray.slice(6, 9)];
+	this.content = (i, j) => {
 		return board[i][j].textContent;
 	}
 
-	function ganoEnLaFila(i, pieza) {
+	function winInTheFile(i, piece) {
 		let result = true;
 		for (let j = 0; j < 3; j++) {
-			result = result && contenido(i, j) == pieza;
+			result = result && content(i, j) == piece;
 		}
 		return result;
 	}
-	function ganoEnLaColumna(i, pieza) {
+	function winInTheRow(i, piece) {
 		let result = true;
 		for (let j = 0; j < 3; j++) {
-			result = result && contenido(j, i) == pieza;
+			result = result && content(j, i) == piece;
 		}
 		return result;
 	}
-	function ganoEnLaDiagonalDerecha(pieza, despl) {
+	function winInTheRightDiagonal(piece, despl) {
 		let result = true;
 		for (let j = 0; j < 3; j++) {
-			result = result && contenido((j + despl) % 3, j) == pieza;
+			result = result && content((j + despl) % 3, j) == piece;
 
 		}
 		return result;
 	}
 
-	function ganoEnLaDiagonalIzquierda(pieza, despl) {
+	function winInTheLeftDiagonal(piece, despl) {
 		let result = true;
 		for (let j = 0; j < 3; j++) {
-			result = result && contenido((j + despl) % 3, 2 - j) == pieza;
+			result = result && content((j + despl) % 3, 2 - j) == piece;
 		}
 		return result;
 	}
 
-	const ganador = (pieza) => {
+	const ganador = (piece) => {
 		let result = false;
 		for (let i = 0; i < 3; i++) {
-			result = result || ganoEnLaColumna(i, pieza);
-			result = result || ganoEnLaFila(i, pieza);
+			result = result || winInTheRow(i, piece);
+			result = result || winInTheFile(i, piece);
 
 		}
-		result = result || ganoEnLaDiagonalDerecha(pieza, 0);
-		result = result || ganoEnLaDiagonalIzquierda(pieza, 0);
+		result = result || winInTheRightDiagonal(piece, 0);
+		result = result || winInTheLeftDiagonal(piece, 0);
 		return result
 	}
 
 	const isATie = () => {
 		let isATie = true;
 		for (let i = 0; i < 9; i++) {
-			isATie = isATie && contenido(Math.trunc(i / 3), i % 3) != "";
+			isATie = isATie && content(Math.trunc(i / 3), i % 3) != "";
 		}
 		return isATie;
 	}
 
-	return { ganador, isATie }
+	return { winner: ganador, isATie }
 }
 
 
@@ -174,7 +174,7 @@ const Game = () => {
 	this.actualPlayer = () => { return turn ? player1 : player2 };
 	this.actualName = () => actualPlayer().getName();
 	this.actualPiece = () => actualPlayer().getPiece();
-	this.isWinner = () => board.ganador(actualPiece());
+	this.isWinner = () => board.winner(actualPiece());
 	this.isATie = () => board.isATie();
 
 	this.play = (element) => {
@@ -196,7 +196,7 @@ function beginGame() {
 	let message = document.querySelector("#winnerMessage");
 	let interaction;
 	const beginInterface = () => {
-		inicializarCeldas(3, 3);
+		initializeGrids(3, 3);
 
 	}
 
