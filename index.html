@@ -6,7 +6,7 @@
     </head>
 
     <body id="document">
-        <div class="inputDiv"></div>
+      
         <div id="titleContainer" class="center">
             <h1 id="title" class="center">Tic-Tac-Toe</h1>
             <br />
@@ -19,14 +19,32 @@
         </div>
 
         <div class="boardContainer">
-            <div class="file">
-                <div class="squre"></div>
-            </div>
         </div>
 
         <div id="winnerContainer" class="center">
             <h1 id="winnerMessage"></h1>
         </div>
+
+
+        <div class="inputContainer">
+            <div class="inputDiv">
+                <div class="namesContainer">
+                    <div.n1Container>
+                        <p class="nameMessage">Input player1's name</p>
+                        <input id="player1Input" type="text"></input>
+                    </div.n1Container>
+                    <div.n2Container>
+                        <p class="nameMessage">Input player2's name</p>
+                        <input id="player2Input" type="text"></input>
+                    </div.n2Container>
+                </div>
+                <div class="buttonContainer">
+                    <button class="saveNames">Save</button>
+                </div>
+            </div>
+        </div>
+        
+
     </body>
     <script type="text/javascript" src="scripts/tic-tac-toe.js"></script>
 </html>

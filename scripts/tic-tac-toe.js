@@ -16,57 +16,46 @@ const initializeGrids = (files, rows) => {
 	}
 }
 
-const inputNames = () => {
-	const inputDiv = document.querySelector("div.inputDiv")
-	const namesContainer = document.createElement("div.namesContainer");
-	const name1Container = document.createElement("div.n1Container")
-	const name2Container = document.createElement("div.n2Container")
-	namesContainer.appendChild(name1Container);
-	namesContainer.appendChild(name2Container);
-
-	const message1 = document.createElement("h1.nameMesage");
-	const message2 = document.createElement("h1.nameMesage");
-
-	message1.textContent="Input player1's name";
-	message2.textContent="Input player2's name";
-
-
-	const name1 = document.createElement("input")
-	const name2 = document.createElement("input")
-	name1.setAttribute('type', 'text');
-	name2.setAttribute('type', 'text');
-
-	name1Container.appendChild(message1);
-	name1Container.appendChild(name1);
+const InputNames = (player1, player2) => {
 	
-	name2Container.appendChild(message2);
-	name2Container.appendChild(name2);
-
-	const btnSetName =document.createElement("button.saveNames")
-	btnSetName.textContent="Save";
-	namesContainer.appendChild(btnSetName);
-
-	inputDiv.appendChild(namesContainer);
-	inputDiv.appendChild(btnSetName);
-
+	let isShown = false;
+	const btnSetName = document.querySelector("button.saveNames");
+	const inputDiv = document.querySelector("div.inputDiv")
+	const inputPlayer1 = document.querySelector("#player1Input");
+	const inputPlayer2 = document.querySelector("#player2Input");
+	
+	this.getPlayer1Name =() => inputPlayer1.value;
+	this.getPlayer2Name =() => inputPlayer2.value;
+	
 	this.showNameInput = () => {
-		inputDiv.style= "display:flex;";
+		if(!isShown)
+			inputDiv.style.visibility= "visible"
+		else
+			inputDiv.style.visibility= "hidden"
+		isShown=!isShown;
 	}
+	btnSetName.addEventListener("click", () => {
+		showNameInput();
+		player1.setName(getPlayer1Name());
+		player2.setName(getPlayer2Name());
+	
+	});
+	
 	return {showNameInput}
 }
 
-let input = inputNames();
-input.showNameInput();
-
 const Player = (name, piece) => {
-	this.getName = () => name;
-	this.getPiece = () => piece;
+	let playerName = name;
+	let playerPiece = piece
+	this.getName = () => playerName;
+	this.getPiece = () => playerPiece;
 	this.equals = (player) => {
 		console.log(`Este es el nombre del ganador `)
 		return name == player.getName() && piece == player.getPiece();
 	}
 	this.toString = () => name;
-	return { getName, getPiece, equals, toString };
+	this.setName = (newName) => {playerName = newName};
+	return { getName, getPiece, equals, toString, setName };
 }
 
 const Score = () => {
@@ -167,6 +156,7 @@ const Game = () => {
 	let player1 = Player("A", "X");
 	let player2 = Player("B", "O");
 	let turn = true;
+	let inputNames = InputNames(player1, player2);
 	let board = Gameboard();
 	let counter = WinCounter(player1, player2);
 
@@ -177,9 +167,11 @@ const Game = () => {
 	this.isWinner = () => board.winner(actualPiece());
 	this.isATie = () => board.isATie();
 
+	this.actualizeInputNames = () => {inputNames = InputNames(player1, player2)}
 	this.play = (element) => {
 		element.innerHTML = actualPiece();
 		if (isWinner()) {
+			actualizeInputNames();
 			counter.countWin(actualPlayer());
 			interface.endGame(actualName());
 		}
@@ -197,7 +189,6 @@ function beginGame() {
 	let interaction;
 	const beginInterface = () => {
 		initializeGrids(3, 3);
-
 	}
 
 	const setInteraction = () => {
