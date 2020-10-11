@@ -27,21 +27,19 @@ const InputNames = (player1, player2) => {
 	this.getPlayer1Name =() => inputPlayer1.value;
 	this.getPlayer2Name =() => inputPlayer2.value;
 	
-	this.showNameInput = () => {
-		if(!isShown)
-			inputDiv.style.visibility= "visible"
-		else
-			inputDiv.style.visibility= "hidden"
+	this.changeMenuVisibility = () => {
+		let visibility = isShown ? "hidden" : "initial";
+		inputDiv.style.visibility = visibility;
 		isShown=!isShown;
 	}
 	btnSetName.addEventListener("click", () => {
-		showNameInput();
+		changeMenuVisibility();
 		player1.setName(getPlayer1Name());
 		player2.setName(getPlayer2Name());
 	
 	});
 	
-	return {showNameInput}
+	return {showNameInput: changeMenuVisibility}
 }
 
 const Player = (name, piece) => {
@@ -180,7 +178,7 @@ const Game = () => {
 		}
 		changeTurn();
 	}
-	return { play, counter };
+	return { play, counter,inputNames };
 }
 
 
@@ -201,6 +199,7 @@ function beginGame() {
 	const endGame = (winnerName) => {
 		message.innerText = `The winner is ${winnerName}`;
 		interaction.removeListeners();
+		
 	}
 
 	const draw = () => {
@@ -224,6 +223,7 @@ const addEventsToButtons = (interface) => {
 	document.querySelector("#newGameButton").addEventListener("click", () => {
 		document.querySelector(".boardContainer").innerHTML = "";
 		interface.setInteraction();
+		interaction.game.inputNames.showNameInput();
 		interface.interaction.counter.resetCounter();
 		message.innerHTML = "";
 	})
@@ -259,7 +259,7 @@ function addInteractionWithInterface() {
 			square.removeEventListener("click", interaction)
 		})
 	}
-	return { removeListeners, counter }
+	return { removeListeners, counter ,game}
 }
 
 let score = Score();
