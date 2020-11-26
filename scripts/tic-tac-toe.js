@@ -17,7 +17,7 @@ const initializeGrids = (files, rows) => {
 };
 
 const InputNames = (player1, player2) => {
-    let isShown = false;
+    let isShown = true;
     const btnSetName = document.querySelector("button.saveNames");
     const inputDiv = document.querySelector("div.inputDiv");
     const inputPlayer1 = document.querySelector("#player1Input");
@@ -31,12 +31,21 @@ const InputNames = (player1, player2) => {
         inputDiv.style.visibility = visibility;
         isShown = !isShown;
     };
-    btnSetName.addEventListener("click", () => {
-        changeMenuVisibility();
+    this.savePlayerNames = () => {
         player1.setName(getPlayer1Name());
         player2.setName(getPlayer2Name());
+    };
+    this.deleteInputsValues = () => {
+        inputPlayer1.value = null;
+        inputPlayer2.value = null;
+    };
+    btnSetName.addEventListener("click", () => {
+        console.log("Esto es un print");
+        savePlayerNames();
+        changeMenuVisibility();
+        deleteInputsValues();
     });
-    return { showNameInput: changeMenuVisibility };
+    return { changeMenuVisibility };
 };
 
 const Player = (name, piece) => {
@@ -174,6 +183,9 @@ const Game = () => {
     this.changeTurn = () => {
         turn = !turn;
     };
+
+    this.newGame = () => inputNames.changeMenuVisibility();
+
     this.actualPlayer = () => {
         return turn ? player1 : player2;
     };
@@ -196,7 +208,7 @@ const Game = () => {
         }
         changeTurn();
     };
-    return { play, counter, inputNames };
+    return { play, counter, newGame };
 };
 
 function beginGame() {
@@ -238,7 +250,12 @@ const addEventsToButtons = (interface) => {
     document.querySelector("#newGameButton").addEventListener("click", () => {
         document.querySelector(".boardContainer").innerHTML = "";
         interface.setInteraction();
-        interaction.game.inputNames.changeMenuVisibility();
+        console.log("Esta es lainterface: " + interface.interaction);
+        console.log("Esta es game: " + interface.interaction.game);
+        console.log(
+            "Esta es la interface: " + interface.interaction.game.toString()
+        );
+        interface.interaction.game.newGame();
         interface.interaction.counter.resetCounter();
         message.innerHTML = "";
     });
