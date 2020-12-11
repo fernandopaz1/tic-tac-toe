@@ -16,7 +16,9 @@ const initializeGrids = (files, rows) => {
     }
 };
 
-const InputNames = (player1, player2) => {
+const InputNames = (game) => {
+    player1 = game.getP1;
+    player2 = game.getP2;
     let isShown = true;
     const btnSetName = document.querySelector("button.saveNames");
     const inputDiv = document.querySelector("div.inputDiv");
@@ -27,6 +29,8 @@ const InputNames = (player1, player2) => {
     this.getPlayer2Name = () => inputPlayer2.value;
 
     this.changeMenuVisibility = () => {
+        console.log("La visivilidad es " + isShown);
+
         let visibility = isShown ? "hidden" : "initial";
         inputDiv.style.visibility = visibility;
         isShown = !isShown;
@@ -40,7 +44,6 @@ const InputNames = (player1, player2) => {
         inputPlayer2.value = null;
     };
     btnSetName.addEventListener("click", () => {
-        console.log("Esto es un print");
         savePlayerNames();
         changeMenuVisibility();
         deleteInputsValues();
@@ -184,14 +187,22 @@ const Game = () => {
         turn = !turn;
     };
 
-    this.newGame = () => inputNames.changeMenuVisibility();
+    this.getP1 = () => new Player(player1.getName, player1.getPiece);
+    this.getP2 = () => new Player(player2.getName, player2.getPiece);
+
+    this.newGame = () => {
+        inputNames.changeMenuVisibility();
+        counter.resetCounter();
+        player1.setName(null);
+        player2.setName(null);
+    };
 
     this.actualPlayer = () => {
         return turn ? player1 : player2;
     };
     this.actualName = () => actualPlayer().getName();
-    this.actualPiece = () => actualPlayer().getPiece();
     this.isWinner = () => board.winner(actualPiece());
+    this.actualPiece = () => actualPlayer().getPiece();
     this.isATie = () => board.isATie();
 
     this.actualizeInputNames = () => {
@@ -208,7 +219,7 @@ const Game = () => {
         }
         changeTurn();
     };
-    return { play, counter, newGame };
+    return { play, counter, newGame, getP1, getP2 };
 };
 
 function beginGame() {
@@ -250,13 +261,13 @@ const addEventsToButtons = (interface) => {
     document.querySelector("#newGameButton").addEventListener("click", () => {
         document.querySelector(".boardContainer").innerHTML = "";
         interface.setInteraction();
-        console.log("Esta es lainterface: " + interface.interaction);
-        console.log("Esta es game: " + interface.interaction.game);
-        console.log(
-            "Esta es la interface: " + interface.interaction.game.toString()
-        );
+        // console.log("Esta es lainterface: " + interface.interaction);
+        // console.log("Esta es game: " + interface.interaction.game);
+        // console.log(
+        //     "Esta es la interface: " + interface.interaction.game.toString()
+        // );
         interface.interaction.game.newGame();
-        interface.interaction.counter.resetCounter();
+        // interface.interaction.counter.resetCounter();
         message.innerHTML = "";
     });
 
@@ -291,4 +302,5 @@ function addInteractionWithInterface() {
 
 let score = Score();
 let interface = beginGame();
+let inputNamesTable = inputNames(iterface.game);
 addEventsToButtons(interface);
