@@ -17,10 +17,11 @@ const initializeGrids = (files, rows) => {
 };
 
 const InputNames = (game) => {
-    player1 = game.getP1;
-    player2 = game.getP2;
+    console.log("Este es el juego ");
+    console.table(game);
+    let player1 = game.getP1();
+    let player2 = game.getP2();
     let isShown = true;
-    const btnSetName = document.querySelector("button.saveNames");
     const inputDiv = document.querySelector("div.inputDiv");
     const inputPlayer1 = document.querySelector("#player1Input");
     const inputPlayer2 = document.querySelector("#player2Input");
@@ -43,12 +44,12 @@ const InputNames = (game) => {
         inputPlayer1.value = null;
         inputPlayer2.value = null;
     };
-    btnSetName.addEventListener("click", () => {
+    this.save = () => {
         savePlayerNames();
         changeMenuVisibility();
         deleteInputsValues();
-    });
-    return { changeMenuVisibility };
+    };
+    return { changeMenuVisibility, save };
 };
 
 const Player = (name, piece) => {
@@ -85,29 +86,17 @@ const Score = () => {
     return { resetScore, countScoreP1, countScoreP2, getP1, getP2 };
 };
 
-const WinCounter = (player1, player2) => {
-    this.countWin = (player) => {
-        console.log(
-            `El resultado de player1.equals(player) es: ${player1.equals(
-                player
-            )}`
-        );
-        console.log(
-            `El resultado de player2.equals(player) es: ${player2.equals(
-                player
-            )}`
-        );
-        if (player1.equals(player)) score.countScoreP1();
-        if (player2.equals(player)) score.countScoreP2();
-    };
+const WinCounter = () => {
     this.resetCounter = () => {
-        score.resetScore;
+        score.resetScore();
     };
     this.toString = () => {
-        return `${player1.toString()} has ${score.getP1()} points and 
-				${player2.toString()} has ${score.getP2()} points`;
+        let p1 = controller.controller.getGame().getP1();
+        let p2 = controller.controller.getGame().getP2();
+        return `${p1.toString()} has ${score.getP1()} points and 
+				${p2.toString()} has ${score.getP2()} points`;
     };
-    return { countWin, resetCounter, toString };
+    return { resetCounter, toString };
 };
 
 const Gameboard = () => {
@@ -179,19 +168,22 @@ const Game = () => {
     let player1 = Player("A", "X");
     let player2 = Player("B", "O");
     let turn = true;
-    let inputNames = InputNames(player1, player2);
     let board = Gameboard();
-    let counter = WinCounter(player1, player2);
+    let counter = WinCounter();
 
     this.changeTurn = () => {
         turn = !turn;
     };
 
-    this.getP1 = () => new Player(player1.getName, player1.getPiece);
-    this.getP2 = () => new Player(player2.getName, player2.getPiece);
+    this.getP1 = () => {
+        return player1;
+    };
+    this.getP2 = () => {
+        return player2;
+    };
 
     this.newGame = () => {
-        inputNames.changeMenuVisibility();
+        score.resetScore();
         counter.resetCounter();
         player1.setName(null);
         player2.setName(null);
@@ -205,17 +197,17 @@ const Game = () => {
     this.actualPiece = () => actualPlayer().getPiece();
     this.isATie = () => board.isATie();
 
-    this.actualizeInputNames = () => {
-        inputNames = InputNames(player1, player2);
-    };
     this.play = (element) => {
         element.innerHTML = actualPiece();
         if (isWinner()) {
-            actualizeInputNames();
-            counter.countWin(actualPlayer());
-            interface.endGame(actualName());
+            if (actualPlayer().equals(player1)) {
+                score.countScoreP1();
+            } else {
+                score.countScoreP2();
+            }
+            controller.endGame(actualName());
         } else if (isATie()) {
-            interface.draw();
+            controller.draw();
         }
         changeTurn();
     };
@@ -224,59 +216,59 @@ const Game = () => {
 
 function beginGame() {
     let message = document.querySelector("#winnerMessage");
-    let interaction;
+    let controller;
     const beginInterface = () => {
         initializeGrids(3, 3);
     };
 
-    const setInteraction = () => {
+    const setController = () => {
         beginInterface();
-        interaction = addInteractionWithInterface();
+        controller = controllerGame();
     };
 
-    setInteraction();
+    setController();
 
     const endGame = (winnerName) => {
         message.innerText = `The winner is ${winnerName}`;
-        interaction.removeListeners();
+        controller.removeListeners();
     };
 
     const draw = () => {
         message.innerText = `Its a draw`;
-        interaction.removeListeners();
+        controller.removeListeners();
     };
 
-    return { interaction, setInteraction, endGame, draw };
+    return {
+        controller: controller,
+        setInteraction: setController,
+        endGame,
+        draw,
+    };
 }
 
-const addEventsToButtons = (interface) => {
+const addEventsToButtons = (controller) => {
     let message = document.querySelector("#winnerMessage");
 
     document.querySelector("#restartButton").addEventListener("click", () => {
         document.querySelector(".boardContainer").innerHTML = "";
-        interface.setInteraction();
+        controller.setInteraction();
         message.innerHTML = "";
     });
 
     document.querySelector("#newGameButton").addEventListener("click", () => {
         document.querySelector(".boardContainer").innerHTML = "";
-        interface.setInteraction();
-        // console.log("Esta es lainterface: " + interface.interaction);
-        // console.log("Esta es game: " + interface.interaction.game);
-        // console.log(
-        //     "Esta es la interface: " + interface.interaction.game.toString()
-        // );
-        interface.interaction.game.newGame();
-        // interface.interaction.counter.resetCounter();
+        controller.setInteraction();
+        controller.controller.getGame().newGame();
+        inputNamesTable.changeMenuVisibility();
         message.innerHTML = "";
     });
 
     document.querySelector("#showCounter").addEventListener("click", () => {
-        message.innerHTML = interface.interaction.counter.toString();
+        message.innerHTML = controller.controller.counter.toString();
     });
 };
 
-function addInteractionWithInterface() {
+function controllerGame() {
     let game = Game();
     let counter = game.counter;
 
@@ -288,6 +280,8 @@ function addInteractionWithInterface() {
         }
     }
 
+    this.getGame = () => game;
+
     const squares = document.querySelectorAll("div.square");
 
     squares.forEach((square) => square.addEventListener("click", interaction));
@@ -297,10 +291,12 @@ function addInteractionWithInterface() {
             square.removeEventListener("click", interaction);
         });
     };
-    return { removeListeners, counter, game };
+    return { removeListeners, counter, getGame };
 }
 
 let score = Score();
-let interface = beginGame();
-let inputNamesTable = inputNames(iterface.game);
-addEventsToButtons(interface);
+let controller = beginGame();
+let inputNamesTable = InputNames(controller.controller.getGame());
+const btnSetName = document.querySelector("button.saveNames");
+btnSetName.addEventListener("click", inputNamesTable.save);
+addEventsToButtons(controller);
