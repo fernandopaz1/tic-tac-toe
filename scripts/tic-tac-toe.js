@@ -30,15 +30,12 @@ const InputNames = (game) => {
     this.getPlayer2Name = () => inputPlayer2.value;
 
     this.changeMenuVisibility = () => {
-        console.log("La visivilidad es " + isShown);
-
         let visibility = isShown ? "hidden" : "initial";
         inputDiv.style.visibility = visibility;
         isShown = !isShown;
     };
     this.savePlayerNames = () => {
-        player1.setName(getPlayer1Name());
-        player2.setName(getPlayer2Name());
+        game.setNames(getPlayer1Name(), getPlayer2Name());
     };
     this.deleteInputsValues = () => {
         inputPlayer1.value = null;
@@ -64,6 +61,7 @@ const Player = (name, piece) => {
     this.toString = () => name;
     this.setName = (newName) => {
         playerName = newName;
+        console.log("se cambio el nombre " + playerName + "  a  " + newName);
     };
     return { getName, getPiece, equals, toString, setName };
 };
@@ -93,6 +91,7 @@ const WinCounter = () => {
     this.toString = () => {
         let p1 = controller.controller.getGame().getP1();
         let p2 = controller.controller.getGame().getP2();
+        console.log("Este es p2 " + p2);
         return `${p1.toString()} has ${score.getP1()} points and 
 				${p2.toString()} has ${score.getP2()} points`;
     };
@@ -189,6 +188,11 @@ const Game = () => {
         player2.setName(null);
     };
 
+    this.setNames = (n1, n2) => {
+        player1.setName(n1);
+        player2.setName(n2);
+    };
+
     this.actualPlayer = () => {
         return turn ? player1 : player2;
     };
@@ -211,7 +215,7 @@ const Game = () => {
         }
         changeTurn();
     };
-    return { play, counter, newGame, getP1, getP2 };
+    return { play, counter, newGame, getP1, getP2, setNames };
 };
 
 function beginGame() {
@@ -294,6 +298,7 @@ function controllerGame() {
     return { removeListeners, counter, getGame };
 }
 
+document.querySelector("div.inputDiv").style.visibility = "hidden";
 let score = Score();
 let controller = beginGame();
 let inputNamesTable = InputNames(controller.controller.getGame());

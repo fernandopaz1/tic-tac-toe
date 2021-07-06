@@ -11,7 +11,7 @@
     font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
     color: rgb(65, 64, 64);
     background-color: rgb(166, 250, 250);
-    border-radius: 1em;
+    border-radius: 1rem;
 }
 
 .center {
@@ -21,21 +21,23 @@
 }
 
 .inputContainer {
+    /* width: 100vh; */
     width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background-color: aqua;
 }
 
 .inputDiv {
-    width: 25rem;
-    height: 27rem;
-    /* margin-left: auto;
-    margin-right: auto; */
-    left: 30rem;
+    width: 32rem;
+    height: 32rem;
+    width: 50%;
     top: 5rem;
     position: absolute;
     z-index: 1;
     display: flex;
-    border: 2px solid red;
+    border: 0.2rem solid red;
     justify-content: space-evenly;
     flex-direction: column;
     background-color: aqua;
@@ -50,30 +52,32 @@
 }
 
 div.n1Container {
-    border: 2px solid black;
+    border: 0.2rem solid black;
     height: 20rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-#player1Input, #player2Input{
-        outline: none;
-        border-color: aquamarine;
-        background-color: chartreuse;
+#player1Input,
+#player2Input {
+    outline: none;
+    border-color: aquamarine;
+    background-color: chartreuse;
+    width: 20vw;
 }
 div.buttonContainer {
     display: flex;
     justify-content: center;
 }
 
-.saveNames{
+.saveNames {
     border-radius: 5%;
-    width: 100px;
-    height: 100px;
+    width: 6.25rem;
+    height: 6.25rem;
     border-radius: 10%;
     background-color: greenyellow;
-    color:red;
+    color: red;
     outline: none;
 }
 
@@ -81,11 +85,11 @@ div.buttonContainer {
     position: relative;
     top: -10px;
     text-align: center;
-    background-color: rgb(106, 255, 138);
+    background-color: rgb(140, 156, 143);
     color: rgb(82, 53, 184);
     font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
     width: 80%;
-    border-radius: 15em;
+    border-radius: 15rem;
 }
 
 .file {
@@ -106,12 +110,12 @@ div.buttonContainer {
     color: rgb(51, 50, 50);
     font-size: 500%;
     text-align: right;
-    border: 3px rgb(155, 122, 247) solid;
-    padding: 50px;
+    border: 0.3rem rgb(155, 122, 247) solid;
+    padding: 4rem;
     border-radius: 10%;
     margin: 0.3%;
-    width: 0.1em;
-    height: 0.1em;
+    width: 0.1rem;
+    height: 0.1rem;
     display: flex;
     justify-content: center;
     align-items: center;
